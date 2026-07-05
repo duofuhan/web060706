@@ -1,0 +1,16 @@
+<view class="container">
+  <view class="title">💰 AI 估价助手</view>
+  <view class="hint" wx:if="{{references.length}}">参考 {{references.length}} 条同类历史成交</view>
+
+  <scroll-view class="msg-list" scroll-y>
+    <view class="msg {{m.role}}" wx:for="{{messages}}" wx:key="index">
+      <view class="bubble">{{m.content}}</view>
+    </view>
+    <view wx:if="{{loading}}" class="msg assistant"><view class="bubble">正在思考…</view></view>
+  </scroll-view>
+
+  <view class="input-bar">
+    <input class="input" value="{{input}}" bindinput="onInput" placeholder="向估价助手提问…" />
+    <button size="mini" type="primary" bindtap="sendBtn">发送</button>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+<view class="container">
+  <view class="title">我的订单</view>
+  <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
+  <view wx:else>
+    <view class="card" wx:for="{{orders}}" wx:key="id">
+      <view class="title">{{item.auction.item.name || '拍品'}}</view>
+      <view class="meta">成交价: ¥{{item.finalPrice}} · {{statusMap[item.status] || item.status}}</view>
+      <view wx:if="{{item.status === 'pending'}}">
+        <button size="mini" type="warn" data-id="{{item.id}}" bindtap="pay">立即支付</button>
+      </view>
+      <view wx:if="{{item.status === 'shipped'}}">
+        <button size="mini" type="primary" data-id="{{item.id}}" bindtap="confirm">确认收货</button>
+      </view>
+    </view>
+  </view>
+</view>

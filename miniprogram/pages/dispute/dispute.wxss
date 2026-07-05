@@ -1,0 +1,10 @@
+.title { font-size: 34rpx; font-weight: 600; margin-bottom: 16rpx; }
+.label { font-size: 26rpx; color: #666; margin: 16rpx 0 8rpx; }
+.input, .textarea { border: 1px solid #ddd; padding: 16rpx; border-radius: 6rpx; background: #fff; }
+.textarea { height: 160rpx; width: 100%; box-sizing: border-box; }
+button { margin-top: 30rpx; }
+.empty { text-align: center; color: #999; padding: 60rpx 0; }
+.card { background: #fff; padding: 20rpx; border-radius: 10rpx; margin-bottom: 16rpx; }
+.card .meta { font-size: 26rpx; color: #909399; margin-bottom: 8rpx; }
+.card .reason { font-size: 28rpx; }
+.card .resolution { font-size: 26rpx; color: #67C23A; margin-top: 12rpx; }

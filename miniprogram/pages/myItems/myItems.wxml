@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="title">我的拍品</view>
+  <view wx:if="{{items.length === 0}}" class="empty">暂无拍品,快去发布吧</view>
+  <view wx:else>
+    <view class="card" wx:for="{{items}}" wx:key="id">
+      <view class="title">{{item.name}}</view>
+      <view class="meta">起拍 ¥{{item.startPrice}} · 成色 {{item.condition}}</view>
+      <view class="status {{item.status}}">{{statusMap[item.status] || item.status}}</view>
+      <button wx:if="{{item.status === 'approved'}}" size="mini" type="primary" data-id="{{item.id}}" bindtap="startAuction">
+        开启拍卖
+      </button>
+    </view>
+  </view>
+</view>

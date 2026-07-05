@@ -1,0 +1,267 @@
+// 拍卖系统 Prisma schema
+// 适配 PostgreSQL 15 + pgvector 0.8.4
+// 运行: pnpm --filter server prisma:migrate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ 枚举 ============
+
+enum UserRole {
+  seller      // 卖家
+  buyer       // 买家
+  auction_admin  // 拍卖管理员
+  system_admin   // 系统管理员
+}
+
+enum ItemStatus {
+  draft        // 草稿
+  pending      // 待管理员审核
+  approved     // 审核通过
+  rejected     // 审核驳回
+  removed      // 已下架
+}
+
+enum AuctionStatus {
+  scheduled   // 待开始
+  live         // 进行中
+  ended        // 已结束
+  canceled     // 已取消
+  settled      // 已成交
+}
+
+enum AuctionType {
+  ascending     // 英式递增拍卖
+  sealed        // 密封投标
+  descending    // 荷兰式递减
+}
+
+enum BidStatus {
+  active       // 当前有效
+  outbid       // 被超越
+  winning      // 当前最高
+  lost         // 失败
+}
+
+enum OrderStatus {
+  pending      // 待支付
+  paid         // 已支付
+  shipped      // 已发货
+  completed    // 已完成
+  canceled     // 已取消
+  refunded     // 已退款
+}
+
+enum DisputeStatus {
+  open         // 已提交
+  processing   // 处理中
+  resolved     // 已解决
+  rejected     // 已驳回
+}
+
+// ============ 用户与权限 ============
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  password      String
+  nickname      String
+  avatar        String?
+  phone         String?   @unique
+  role          UserRole  @default(buyer)
+  status        Int       @default(1)  // 1启用 0禁用
+  introduction  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  items         Item[]
+  bids          Bid[]
+  orders        Order[]
+  auctions      Auction[]    @relation("AuctionSeller")
+  wonAuctions   Auction[]    @relation("AuctionWinner")
+  disputesOpened  Dispute[] @relation("DisputeOpener")
+  disputesHandled  Dispute[] @relation("DisputeHandler")
+  sessions      Session[]
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+}
+
+// ============ 拍品 ============
+
+model Item {
+  id             Int        @id @default(autoincrement())
+  sellerId       Int
+  seller         User      @relation(fields: [sellerId], references: [id])
+  name           String
+  category       String?   // 类目: 数码 / 服饰 / 艺术品 ...
+  condition      String    // 成色: 全新/95新/9成新...
+  originPrice    Decimal   @db.Decimal(10, 2)
+  startPrice     Decimal   @db.Decimal(10, 2)
+  reservePrice   Decimal?   @db.Decimal(10, 2) // 保留价, 可选项
+  description    String     @db.Text
+  images         String[]   // 图片URL数组
+  status         ItemStatus @default(draft)
+  rejectReason   String?
+  auction        Auction?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status])
+  @@index([sellerId])
+}
+
+// ============ 拍卖场次 ============
+
+model Auction {
+  id            Int           @id @default(autoincrement())
+  sellerId      Int
+  seller        User          @relation("AuctionSeller", fields: [sellerId], references: [id])
+  itemId        Int           @unique
+  item          Item          @relation(fields: [itemId], references: [id])
+  type          AuctionType   @default(ascending)
+  status        AuctionStatus @default(scheduled)
+  startPrice    Decimal       @db.Decimal(10, 2)
+  currentPrice  Decimal       @db.Decimal(10, 2)
+  minIncrement  Decimal       @default(50) @db.Decimal(10, 2) // 加价幅度
+  startTime     DateTime
+  endTime       DateTime
+  winnerId      Int?
+  winner        User?          @relation("AuctionWinner", fields: [winnerId], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  bids          Bid[]
+  order         Order?
+  disputes      Dispute[]
+
+  @@index([status])
+  @@index([startTime])
+}
+
+// ============ 出价记录 ============
+
+model Bid {
+  id          Int        @id @default(autoincrement())
+  auctionId   Int
+  auction     Auction    @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  amount      Decimal    @db.Decimal(10, 2)
+  status      BidStatus  @default(active)
+  isMax       Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+
+  @@index([auctionId, amount])
+  @@index([userId])
+}
+
+// ============ 订单 ============
+
+model Order {
+  id            Int          @id @default(autoincrement())
+  auctionId     Int          @unique
+  auction       Auction      @relation(fields: [auctionId], references: [id])
+  buyerId       Int
+  buyer         User         @relation(fields: [buyerId], references: [id])
+  finalPrice    Decimal      @db.Decimal(10, 2)
+  status        OrderStatus  @default(pending)
+  paymentTime   DateTime?
+  shippedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime     @default(now())
+
+  @@index([buyerId])
+}
+
+// ============ 争议处理 ============
+
+model Dispute {
+  id            Int            @id @default(autoincrement())
+  auctionId     Int
+  auction       Auction        @relation(fields: [auctionId], references: [id])
+  openedBy      Int
+  opener        User           @relation("DisputeOpener", fields: [openedBy], references: [id])
+  handledBy     Int?
+  handler       User?          @relation("DisputeHandler", fields: [handledBy], references: [id])
+  reason        String         @db.Text
+  status        DisputeStatus  @default(open)
+  resolution    String?        @db.Text
+  createdAt     DateTime       @default(now())
+  resolvedAt    DateTime?
+}
+
+// ============ RAG 向量检索 ============
+
+// 成交历史向量化, 用于 AI 估价助手
+// embedding 字段使用 Unsupported("vector(1024)") 配合 raw SQL 写入与检索
+model SoldItemEmbedding {
+  id          Int      @id @default(autoincrement())
+  itemId      Int      // 对应成拍品ID
+  name        String
+  category    String?
+  condition   String
+  finalPrice  Decimal  @db.Decimal(10, 2)
+  soldAt      DateTime
+  embedding   Unsupported("vector(1024)")
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([category])
+}
+
+// AI 多轮估价会话
+model AiValuationSession {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  itemId        Int?
+  title         String
+  messages      Json     @db.JsonB  // 多轮历史 [{role, content}]
+  recommendations Json? @db.JsonB
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// AI 描述优化历史
+model AiDescriptionHistory {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  itemId        Int?
+  rawInput      Json     @db.JsonB
+  output        String   @db.Text
+  model         String
+  createdAt     DateTime @default(now())
+}
+
+// ============ 系统配置与日志 ============
+
+model SystemConfig {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model OperationLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  action      String
+  target      String?
+  ip          String?
+  detail      Json?    @db.JsonB
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}

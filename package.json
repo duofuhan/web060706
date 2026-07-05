@@ -1,0 +1,18 @@
+{
+  "name": "auction-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "基于移动端的拍卖系统 - 微信小程序 + Vue3后台 + Node.js后端",
+  "scripts": {
+    "dev:server": "pnpm --filter server dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "build:server": "pnpm --filter server build",
+    "build:admin": "pnpm --filter admin build",
+    "db:migrate": "pnpm --filter server prisma:migrate",
+    "db:generate": "pnpm --filter server prisma:generate",
+    "db:studio": "pnpm --filter server prisma:studio"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

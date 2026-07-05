@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="title">我的</view>
+  <view wx:if="{{userInfo}}" class="profile">
+    <view class="info">账号: {{userInfo.username}}</view>
+    <view class="info">角色: {{userInfo.role === 'seller' ? '卖家' : (userInfo.role === 'buyer' ? '买家' : userInfo.role)}}</view>
+  </view>
+  <view wx:else>
+    <button type="primary" bindtap="goLogin">去登录</button>
+  </view>
+
+  <view class="menu">
+    <view class="menu-item" bindtap="goMyItems">📦 我的拍品</view>
+    <view class="menu-item" bindtap="goOrders">🛒 我的订单</view>
+    <view class="menu-item" bindtap="goValuation">💰 AI 估价助手</view>
+    <view class="menu-item" bindtap="goDispute">⚠️ 发起争议</view>
+  </view>
+
+  <button wx:if="{{userInfo}}" style="margin-top:60rpx" bindtap="logout">退出登录</button>
+</view>

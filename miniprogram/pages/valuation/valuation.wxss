@@ -1,0 +1,13 @@
+.title { font-size: 34rpx; font-weight: 600; margin-bottom: 16rpx; }
+.hint { font-size: 24rpx; color: #67C23A; margin-bottom: 16rpx; }
+.msg-list { background: #fff; border-radius: 12rpx; padding: 20rpx; height: 70vh; box-sizing: border-box; }
+.msg { display: flex; margin-bottom: 16rpx; }
+.msg.user { justify-content: flex-end; }
+.bubble {
+  max-width: 80%; padding: 16rpx 20rpx; border-radius: 10rpx; font-size: 26rpx;
+  white-space: pre-wrap; word-break: break-word;
+}
+.msg.user .bubble { background: #1296db; color: #fff; }
+.msg.assistant .bubble { background: #f4f4f5; color: #333; }
+.input-bar { display: flex; gap: 16rpx; margin-top: 16rpx; }
+.input-bar .input { flex: 1; border: 1px solid #ddd; padding: 16rpx; border-radius: 8rpx; }

@@ -1,0 +1,4 @@
+.title { font-size: 34rpx; font-weight: 600; margin-bottom: 24rpx; }
+.input { border: 1px solid #ddd; padding: 20rpx; border-radius: 8rpx; margin-bottom: 20rpx; }
+.msg-list { margin-top: 40rpx; }
+.msg-item { padding: 16rpx 0; border-bottom: 1rpx solid #eee; }

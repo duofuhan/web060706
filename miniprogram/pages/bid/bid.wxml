@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="title">实时竞拍</view>
+  <input class="input" type="number" placeholder="输入出价金额" bindinput="onInput" />
+  <button type="warn" bindtap="bid">出价</button>
+  <view class="msg-list">
+    <view class="msg-item" wx:for="{{messages}}" wx:key="index">
+      <text wx:if="{{item.action === 'bid'}}">用户{{item.userId}} 出价 ¥{{item.amount}}</text>
+      <text wx:else>{{item.message || item.action}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="title">登录 / 注册</view>
+  <input class="input" placeholder="账号" data-field="username" bindinput="onInput" />
+  <input class="input" password placeholder="密码" data-field="password" bindinput="onInput" />
+  <radio-group class="role" bindchange="onRoleChange">
+    <label><radio value="buyer" checked="{{role==='buyer'}}" />买家</label>
+    <label><radio value="seller" checked="{{role==='seller'}}" />卖家</label>
+  </radio-group>
+  <button type="primary" bindtap="submit">注册并登录</button>
+</view>

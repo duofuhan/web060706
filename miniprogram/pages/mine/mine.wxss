@@ -1,0 +1,3 @@
+.title { font-size: 36rpx; font-weight: 600; margin-bottom: 30rpx; }
+.info { margin-bottom: 16rpx; }
+button { margin-top: 40rpx; }

@@ -1,0 +1,7 @@
+<view class="container" wx:if="{{auction}}">
+  <view class="title">{{auction.title}}</view>
+  <view class="info">起拍价: ¥{{auction.startPrice}}</view>
+  <view class="info">当前价: ¥{{auction.currentPrice}}</view>
+  <button type="primary" bindtap="goBid">参与竞拍</button>
+</view>
+<view wx:else class="loading">加载中…</view>
