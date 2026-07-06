@@ -1,7 +1,28 @@
 .title { font-size: 32rpx; font-weight: 600; margin: 10rpx 0 20rpx; }
 .label { font-size: 26rpx; color: #666; margin: 18rpx 0 10rpx; }
 .input, .textarea { border: 1px solid #ddd; padding: 16rpx; border-radius: 6rpx; background: #fff; }
-.textarea { height: 180rpx; width: 100%; box-sizing: border-box; }
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 120rpx;
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+.ai-actions {
+  display: flex;
+  gap: 16rpx;
+  margin: 8rpx 0 4rpx;
+}
+.ai-actions .ai-tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border: 1rpx solid #1296db;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: #1296db;
+  background: #f0f9ff;
+}
+.ai-actions .ai-tag.valuation { color: #67C23A; border-color: #67C23A; background: #f0f9eb; }
 .ai-tag { color: #1296db; font-size: 24rpx; margin-left: 10rpx; }
 .loading { color: #999; font-size: 24rpx; margin-top: 8rpx; }
 button { margin-top: 40rpx; }

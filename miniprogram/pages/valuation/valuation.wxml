@@ -1,16 +1,19 @@
-<view class="container">
-  <view class="title">💰 AI 估价助手</view>
-  <view class="hint" wx:if="{{references.length}}">参考 {{references.length}} 条同类历史成交</view>
+<view class="page">
+  <view class="top">💰 AI 估价助手</view>
+  <view class="tip" wx:if="{{loading && elapsed > 5}}">AI 正在分析,已等待 {{elapsed}} 秒…</view>
 
-  <scroll-view class="msg-list" scroll-y>
-    <view class="msg {{m.role}}" wx:for="{{messages}}" wx:key="index">
+  <view class="area">
+    <view class="empty" wx:if="{{msgs.length === 0 && !loading}}">输入拍品信息,获取起拍价建议</view>
+    <view class="line {{m.role === 'user' ? 'user' : 'ai'}}" wx:for="{{msgs}}" wx:key="index">
       <view class="bubble">{{m.content}}</view>
     </view>
-    <view wx:if="{{loading}}" class="msg assistant"><view class="bubble">正在思考…</view></view>
-  </scroll-view>
+    <view class="line ai" wx:if="{{loading}}">
+      <view class="bubble loading">思考中…{{elapsed > 0 ? '(' + elapsed + 's)' : ''}}</view>
+    </view>
+  </view>
 
-  <view class="input-bar">
-    <input class="input" value="{{input}}" bindinput="onInput" placeholder="向估价助手提问…" />
-    <button size="mini" type="primary" bindtap="sendBtn">发送</button>
+  <view class="bar">
+    <input value="{{input}}" bindinput="onInput" placeholder="输入问题…" disabled="{{loading}}" />
+    <button size="mini" type="primary" bindtap="sendBtn" loading="{{loading}}">发送</button>
   </view>
 </view>

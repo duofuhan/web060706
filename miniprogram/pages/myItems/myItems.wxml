@@ -6,9 +6,12 @@
       <view class="title">{{item.name}}</view>
       <view class="meta">起拍 ¥{{item.startPrice}} · 成色 {{item.condition}}</view>
       <view class="status {{item.status}}">{{statusMap[item.status] || item.status}}</view>
-      <button wx:if="{{item.status === 'approved'}}" size="mini" type="primary" data-id="{{item.id}}" bindtap="startAuction">
-        开启拍卖
-      </button>
+      <view wx:if="{{item.status === 'approved' && !item.auction}}" style="margin-top:16rpx">
+        <button size="mini" type="primary" data-id="{{item.id}}" bindtap="startAuction">开启拍卖</button>
+      </view>
+      <view wx:elif="{{item.status === 'approved' && item.auction}}" style="margin-top:16rpx">
+        <view class="status-label">已有拍卖场次 ({{item.auction.status === 'scheduled' ? '待开始' : item.auction.status === 'live' ? '进行中' : '已结束'}})</view>
+      </view>
     </view>
   </view>
 </view>

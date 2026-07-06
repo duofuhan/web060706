@@ -3,49 +3,54 @@ const { post } = require('../../utils/api.js');
 Page({
   data: {
     input: '',
-    messages: [],
-    sessionId: null,
+    msgs: [],
     loading: false,
-    references: [],
+    elapsed: 0,
   },
+  _timer: null,
+
   onLoad(query) {
     const name = decodeURIComponent(query.name || '');
     const condition = decodeURIComponent(query.condition || '');
-    const originPrice = query.originPrice || '';
+    const price = query.originPrice || '';
     if (name) {
-      const first = `我有一台 ${name}(${condition}, 原价 ¥${originPrice}) 希望拍卖,请帮我分析市场定价并给出起拍价建议。`;
-      this.setData({ input: first });
-      this.send(first);
+      this.setData({
+        input: `我有一台 ${name}(${condition}, 原价 ¥${price}) 希望拍卖,请帮我分析市场定价并给出起拍价建议。`,
+      });
     }
   },
 
   onInput(e) { this.setData({ input: e.detail.value }); },
-
   sendBtn() {
-    if (!this.data.input.trim()) return;
+    if (!this.data.input.trim() || this.data.loading) return;
     this.send(this.data.input);
   },
 
   async send(text) {
-    this.setData({ loading: true });
-    this.setData({
-      messages: [...this.data.messages, { role: 'user', content: text }],
-      input: '',
-    });
+    const newMsgs = [...this.data.msgs, { role: 'user', content: text }];
+    this.setData({ msgs: newMsgs, input: '', loading: true, elapsed: 0 });
+
+    this._timer = setInterval(() => {
+      this.setData({ elapsed: this.data.elapsed + 1 });
+    }, 1000);
+
     try {
       const body = { query: text };
-      if (this.data.sessionId) body.sessionId = this.data.sessionId;
-      const res = await post('/ai/valuation', body);
-      const reply = res.data?.reply || '抱歉,暂时无法生成回复。';
+      if (this.data._sessionId) body.sessionId = this.data._sessionId;
+      const res = await post('/ai/valuation', body, { timeout: 180000 });
       this.setData({
-        sessionId: res.data?.sessionId ?? this.data.sessionId,
-        references: res.data?.references ?? [],
-        messages: [...this.data.messages, { role: 'assistant', content: reply }],
+        _sessionId: res.data?.sessionId,
+        msgs: [...newMsgs, { role: 'assistant', content: res.data?.reply || '无回复' }],
       });
     } catch (e) {
-      this.setData({ messages: [...this.data.messages, { role: 'assistant', content: '服务异常,请稍后再试' }] });
+      this.setData({
+        msgs: [...newMsgs, { role: 'assistant', content: '请求失败,请重试' }],
+      });
     } finally {
-      this.setData({ loading: false });
+      clearInterval(this._timer);
+      this.setData({ loading: false, elapsed: 0 });
     }
   },
+
+  onUnload() { if (this._timer) clearInterval(this._timer); },
 });

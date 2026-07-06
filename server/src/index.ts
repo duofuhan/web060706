@@ -31,7 +31,7 @@ async function main() {
   app.use('/api/users', userRoutes);
   app.use('/api/items', itemRoutes);
   app.use('/api/auctions', auctionRoutes);
-  app.use('/api/bids', auth, bidRoutes);
+  app.use('/api/bids', bidRoutes);
   app.use('/api/orders', auth, orderRoutes);
   app.use('/api/admin', auth, adminRoutes);
   app.use('/api/ai', auth, aiRoutes);

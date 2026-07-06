@@ -17,10 +17,10 @@ Page({
   async startAuction(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
-      title: '开始拍卖',
-      content: '设置拍卖结束时间(分钟)',
+      title: '设置拍卖结束时间',
       editable: true,
-      placeholder: '60',
+      placeholderText: '填写分钟数',
+      content: '',
       success: async (r) => {
         if (!r.confirm) return;
         const minutes = Number(r.content) || 60;
@@ -34,7 +34,10 @@ Page({
           });
           wx.showToast({ title: '拍卖已启动', icon: 'success' });
           this.load();
-        } catch (e) {}
+        } catch (e) {
+          // 如果服务器返回"已存在场次",立刻刷新列表(按钮隐藏)
+          this.load();
+        }
       },
     });
   },

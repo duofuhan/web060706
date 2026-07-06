@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { prisma } from '../../db/prisma.js';
 import { redis } from '../../db/redis.js';
 import { AppError } from '../../utils/error.js';
+import { indexSoldItem } from '../ai/ai.service.js';
 
 const createSchema = z.object({
   itemId: z.coerce.number(),
@@ -115,6 +116,14 @@ export const auctionService = {
         prisma.bid.updateMany({ where: { auctionId: id, id: { not: topBid.id } }, data: { status: 'outbid' } }),
         prisma.order.create({ data: { auctionId: id, buyerId: topBid.userId, finalPrice, status: 'pending' } }),
       ]);
+      indexSoldItem({
+        itemId: auction.itemId,
+        name: auction.item.name,
+        category: auction.item.category,
+        condition: auction.item.condition,
+        finalPrice: Number(finalPrice),
+        soldAt: new Date(),
+      }).catch((e) => console.error('[RAG] forceEnd 写入成交向量失败:', e.message));
       resultStatus = 'settled';
     } else {
       await prisma.auction.update({ where: { id }, data: { status: 'ended' } });
@@ -199,6 +208,14 @@ export const auctionService = {
             },
           }),
         ]);
+        indexSoldItem({
+          itemId: a.itemId,
+          name: a.item.name,
+          category: a.item.category,
+          condition: a.item.condition,
+          finalPrice: Number(winning.amount),
+          soldAt: new Date(),
+        }).catch((e) => console.error('[RAG] endExpired 写入成交向量失败:', e.message));
         await redis.del(`auction:${a.id}:winner`, `auction:${a.id}:ranking`);
       } else {
         await prisma.auction.update({

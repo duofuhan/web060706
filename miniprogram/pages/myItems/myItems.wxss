@@ -8,3 +8,4 @@
 .status.pending { background: #fdf6ec; color: #E6A23C; }
 .status.rejected { background: #fef0f0; color: #F56C6C; }
 .status.draft { background: #f4f4f5; color: #909399; }
+.status-label { font-size: 24rpx; color: #909399; }

@@ -22,12 +22,20 @@
   <view class="label">起拍价 *</view>
   <input class="input" type="digit" data-field="startPrice" bindinput="onInput" />
 
-  <view class="label">
-    商品介绍
+  <view class="label">商品介绍</view>
+  <view class="ai-actions">
     <text class="ai-tag" bindtap="optimizeDescription">✨ AI 优化文案</text>
-    <text class="ai-tag" style="color:#67C23A;margin-left:12rpx" bindtap="goValuation">💰 AI 估价</text>
+    <text class="ai-tag valuation" bindtap="goValuation">💰 AI 估价</text>
   </view>
-  <textarea class="textarea" data-field="description" bindinput="onInput" value="{{form.description}}" placeholder="可点上方 AI 自动生成,也可手动编辑" />
+  <textarea
+    class="textarea"
+    data-field="description"
+    bindinput="onInput"
+    value="{{form.description}}"
+    placeholder="可点上方 AI 自动生成,也可手动编辑"
+    auto-height
+    maxlength="-1"
+  />
   <view wx:if="{{aiLoading}}" class="loading">AI 正在创作中…</view>
 
   <button type="primary" bindtap="submit">提交拍品</button>

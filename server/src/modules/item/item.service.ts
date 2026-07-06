@@ -94,6 +94,10 @@ export const itemService = {
     if (item.sellerId !== sellerId && role !== 'system_admin') {
       throw new AppError('无权删除', 403, 403);
     }
+    const active = await prisma.auction.findFirst({
+      where: { itemId: id, status: { in: ['scheduled', 'live'] } },
+    });
+    if (active) throw new AppError('该拍品有进行中的拍卖场次,无法删除');
     return prisma.item.update({ where: { id }, data: { status: 'removed' } });
   },
 
@@ -120,6 +124,7 @@ export const itemService = {
     const [list, total] = await Promise.all([
       prisma.item.findMany({
         where,
+        include: { auction: { select: { id: true, status: true } } },
         skip: (q.page - 1) * q.pageSize,
         take: q.pageSize,
         orderBy: { createdAt: 'desc' },
