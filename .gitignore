@@ -37,4 +37,4 @@ miniprogram/project.private.config.json
 
 # 临时
 .tmp/
-.cache/
+.cache/server/uploads/
