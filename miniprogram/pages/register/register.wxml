@@ -1,0 +1,13 @@
+<view class="register-wrap">
+  <view class="register-card">
+    <view class="register-title">注册</view>
+    <input class="register-input" placeholder="请输入账号" data-field="username" bindinput="onInput" />
+    <input class="register-input" password placeholder="请输入密码" data-field="password" bindinput="onInput" />
+    <radio-group class="role-group" bindchange="onRoleChange">
+      <label><radio value="buyer" checked="{{role==='buyer'}}" color="#667eea" /> 买家</label>
+      <label><radio value="seller" checked="{{role==='seller'}}" color="#667eea" /> 卖家</label>
+    </radio-group>
+    <button type="primary" bindtap="doRegister">注 册</button>
+    <view class="switch" bindtap="goLogin">已有账号？点击登录</view>
+  </view>
+</view>

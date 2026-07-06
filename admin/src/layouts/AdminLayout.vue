@@ -19,6 +19,7 @@ function handleLogout() {
 const menu = [
   { path: '/dashboard', label: '控制台', icon: 'DataLine' },
   { path: '/users', label: '用户管理', icon: 'User' },
+  { path: '/all-items', label: '拍品', icon: 'Goods' },
   { path: '/items', label: '拍品审核', icon: 'Goods' },
   { path: '/auctions', label: '拍卖场次', icon: 'Auction' },
   { path: '/disputes', label: '争议处理', icon: 'Warning' },

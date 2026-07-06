@@ -1,11 +1,33 @@
 <view class="container">
-  <view class="title">实时竞拍</view>
-  <input class="input" type="number" placeholder="输入出价金额" bindinput="onInput" />
-  <button type="warn" bindtap="bid">出价</button>
-  <view class="msg-list">
-    <view class="msg-item" wx:for="{{messages}}" wx:key="index">
-      <text wx:if="{{item.action === 'bid'}}">用户{{item.userId}} 出价 ¥{{item.amount}}</text>
-      <text wx:else>{{item.message || item.action}}</text>
+  <view wx:if="{{!loggedIn}}" class="login-prompt">
+    <view class="login-icon">🔒</view>
+    <view class="login-msg">未登录</view>
+    <view class="login-desc">请先登录后参与竞拍</view>
+    <button type="primary" bindtap="goLogin">前往登录</button>
+  </view>
+  <view wx:else>
+    <view class="auction-header">{{itemName || '实时竞拍'}}</view>
+    <image class="item-img" wx:if="{{itemImage}}" src="{{itemImage}}" mode="widthFix" />
+    <view class="price-row">
+      <view class="price-box">
+        <view class="price-label">起拍价</view>
+        <view class="price-value">¥{{startPrice}}</view>
+      </view>
+      <view class="price-box highlight">
+        <view class="price-label">当前价</view>
+        <view class="price-value">¥{{currentPrice}}</view>
+      </view>
+    </view>
+    <input class="input" type="number" value="{{amount}}" placeholder="输入出价金额" bindinput="onInput" />
+    <button type="warn" bindtap="bid">出价</button>
+    <view class="bid-list" wx:if="{{bids.length > 0}}">
+      <view class="bid-title">出价记录</view>
+      <view class="bid-item" wx:for="{{bids}}" wx:for-index="idx" wx:key="index">
+        <view class="bid-rank">#{{idx + 1}}</view>
+        <view class="bid-user">用户{{item.userId}}</view>
+        <view class="bid-amount">¥{{item.amount}}</view>
+        <view class="bid-time">{{item.createdAt ? item.createdAt.slice(11, 19) : ''}}</view>
+      </view>
     </view>
   </view>
 </view>

@@ -8,6 +8,13 @@ Page({
     aiLoading: false,
   },
 
+  onShow() {
+    this.setData({
+      form: { name: '', condition: '', originPrice: '', startPrice: '', description: '' },
+      imageList: [],
+    });
+  },
+
   onInput(e) {
     const { field } = e.currentTarget.dataset;
     this.setData({ [`form.${field}`]: e.detail.value });
@@ -52,7 +59,8 @@ Page({
 
   async optimizeDescription() {
     const { name, condition, originPrice } = this.data.form;
-    if (!name || !condition || !originPrice) {
+    const op = Number(originPrice);
+    if (!name || !condition || !originPrice || isNaN(op) || op <= 0) {
       return wx.showToast({ title: '请先填写名称/成色/原价', icon: 'none' });
     }
     this.setData({ aiLoading: true });
@@ -70,7 +78,9 @@ Page({
 
   goValuation() {
     const { name, condition, originPrice } = this.data.form;
+    const op = Number(originPrice);
     if (!name) return wx.showToast({ title: '请先填写拍品名称', icon: 'none' });
+    if (originPrice && (isNaN(op) || op <= 0)) return wx.showToast({ title: '请输入正确价格', icon: 'none' });
     wx.navigateTo({
       url: `/pages/valuation/valuation?name=${encodeURIComponent(name)}&condition=${encodeURIComponent(condition)}&originPrice=${originPrice}`,
     });
@@ -80,6 +90,14 @@ Page({
     const f = this.data.form;
     if (!f.name || !f.startPrice) {
       return wx.showToast({ title: '请填写必填项', icon: 'none' });
+    }
+    const originPrice = Number(f.originPrice);
+    if (f.originPrice && (isNaN(originPrice) || originPrice <= 0)) {
+      return wx.showToast({ title: '请输入正确价格', icon: 'none' });
+    }
+    const startPrice = Number(f.startPrice);
+    if (isNaN(startPrice) || startPrice <= 0) {
+      return wx.showToast({ title: '请输入正确价格', icon: 'none' });
     }
     wx.showLoading({ title: '提交中…' });
     try {

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { getAuctions } from '@/api/admin';
 
+const route = useRoute();
 const list = ref<any[]>([]);
 const loading = ref(false);
-const filterStatus = ref('');
+const filterStatus = ref(route.query.status as string || '');
 
 const statusTag: Record<string, any> = {
   scheduled: { t: 'info', l: '待开始' },

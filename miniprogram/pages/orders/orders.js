@@ -7,10 +7,10 @@ const statusMap = {
 };
 
 Page({
-  data: { orders: [], statusMap, myUserId: null },
+  data: { orders: [], statusMap, myUserId: null, myRole: '', imgBase: '' },
   onShow() {
     const user = app.globalData.userInfo;
-    this.setData({ myUserId: user?.id ?? null });
+    this.setData({ myUserId: user?.id ?? null, myRole: user?.role ?? '', imgBase: app.globalData.apiBase.replace('/api', '') });
     this.load();
   },
   async load() {
@@ -19,7 +19,7 @@ Page({
       if (!app.globalData.userInfo) {
         const me = await get('/users/me');
         app.globalData.userInfo = me.data;
-        this.setData({ myUserId: me.data.id });
+        this.setData({ myUserId: me.data.id, myRole: me.data.role });
       }
       const res = await get('/orders', { pageSize: 30 });
       this.setData({ orders: res.data.list || [] });
@@ -30,6 +30,14 @@ Page({
     try {
       await post(`/orders/${id}/pay`, {});
       wx.showToast({ title: '已支付', icon: 'success' });
+      this.load();
+    } catch (e) {}
+  },
+  async ship(e) {
+    const id = e.currentTarget.dataset.id;
+    try {
+      await post(`/orders/${id}/ship`, {});
+      wx.showToast({ title: '已发货', icon: 'success' });
       this.load();
     } catch (e) {}
   },

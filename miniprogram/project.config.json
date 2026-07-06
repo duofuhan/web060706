@@ -2,7 +2,7 @@
   "miniprogramRoot": "",
   "projectname": "auction-miniprogram",
   "description": "基于移动端拍卖系统",
-  "appid": "wx8aaaeb56eddd2916",
+  "appid": "wxb758be8e147a555a",
   "setting": {
     "urlCheck": false,
     "es6": true,
@@ -30,7 +30,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "3.5.5",
+  "libVersion": "3.16.1",
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {

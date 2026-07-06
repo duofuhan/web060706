@@ -1,12 +1,15 @@
 <view class="container">
   <view class="header">🔥 拍卖大厅</view>
   <view wx:if="{{loading}}" class="empty">加载中…</view>
-  <view wx:elif="{{auctions.length === 0}}" class="empty">暂无进行中的拍卖,请稍后再来</view>
+  <view wx:elif="{{auctions.length === 0}}" class="empty">暂无拍卖,请稍后再来</view>
   <view wx:else>
     <view class="card" wx:for="{{auctions}}" wx:key="id" bindtap="goAuction" data-id="{{item.id}}">
-      <view class="title">{{item.item.name || '未命名拍品'}}</view>
-      <view class="meta">起拍 ¥{{item.startPrice}} | 当前 ¥{{item.currentPrice}}</view>
-      <view class="status live">{{item.status === 'live' ? '🔴 竞拍中' : item.status}}</view>
+      <image class="thumb" wx:if="{{item.item.images && item.item.images.length > 0}}" src="{{imgBase + item.item.images[0]}}" mode="aspectFill" />
+      <view class="card-body">
+        <view class="title">{{item.item.name || '未命名拍品'}}</view>
+        <view class="meta">起拍 ¥{{item.startPrice}} · 当前 ¥{{item.currentPrice}}</view>
+        <view class="status-tag status-{{item.status}}">{{item.status === 'live' ? '竞拍中' : item.status === 'settled' ? '已成交' : item.status === 'ended' ? '已结束' : item.status === 'scheduled' ? '待开始' : item.status}}</view>
+      </view>
     </view>
   </view>
 </view>

@@ -1,4 +1,5 @@
 const { get, post } = require('../../utils/api.js');
+const app = getApp();
 
 const statusMap = {
   draft: '草稿', pending: '待审核', approved: '审核通过',
@@ -6,8 +7,11 @@ const statusMap = {
 };
 
 Page({
-  data: { items: [], statusMap },
-  onShow() { this.load(); },
+  data: { items: [], statusMap, imgBase: '' },
+  onShow() {
+    this.setData({ imgBase: app.globalData.apiBase.replace('/api', '') });
+    this.load();
+  },
   async load() {
     try {
       const res = await get('/items/mine', { pageSize: 50 });

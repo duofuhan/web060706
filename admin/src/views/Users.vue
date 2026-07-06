@@ -73,10 +73,15 @@ async function submit() {
   }
 }
 
-async function onDisable(row: UserItem) {
-  await ElMessageBox.confirm(`确定禁用 ${row.username} ?`, '提示', { type: 'warning' });
-  await disableUser(row.id);
-  ElMessage.success('已禁用');
+async function toggleStatus(row: UserItem) {
+  const action = row.status === 1 ? '禁用' : '启用';
+  await ElMessageBox.confirm(`确定${action} ${row.username} ?`, '提示', { type: 'warning' });
+  if (row.status === 1) {
+    await disableUser(row.id);
+  } else {
+    await updateUser(row.id, { status: 1 });
+  }
+  ElMessage.success(`已${action}`);
   load();
 }
 
@@ -116,7 +121,7 @@ onMounted(load);
       <el-table-column label="操作" width="180">
         <template #default="{ row }">
           <el-button size="small" @click="openEdit(row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="onDisable(row)">禁用</el-button>
+          <el-button size="small" :type="row.status === 1 ? 'danger' : 'success'" @click="toggleStatus(row)">{{ row.status === 1 ? '禁用' : '启用' }}</el-button>
         </template>
       </el-table-column>
     </el-table>

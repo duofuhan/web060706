@@ -1,7 +1,16 @@
 <view class="container" wx:if="{{auction}}">
-  <view class="title">{{auction.title}}</view>
-  <view class="info">起拍价: ¥{{auction.startPrice}}</view>
-  <view class="info">当前价: ¥{{auction.currentPrice}}</view>
+  <image class="auction-img" wx:if="{{auction.item.images && auction.item.images.length > 0}}" src="{{imgBase + auction.item.images[0]}}" mode="widthFix" />
+  <view class="auction-title">{{auction.item.name}}</view>
+  <view class="info-card">
+    <view class="info-row">
+      <view class="info-label">起拍价</view>
+      <view class="info-value">¥{{auction.startPrice}}</view>
+    </view>
+    <view class="info-row">
+      <view class="info-label">当前价</view>
+      <view class="info-value">¥{{auction.currentPrice}}</view>
+    </view>
+  </view>
   <button type="primary" bindtap="goBid">参与竞拍</button>
 </view>
-<view wx:else class="loading">加载中…</view>
+<view wx:else class="empty" style="padding:200rpx 0">加载中…</view>

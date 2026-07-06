@@ -11,6 +11,7 @@ const routes = [
       { path: '', redirect: '/dashboard' },
       { path: 'dashboard', name: 'dashboard', component: () => import('@/views/Dashboard.vue') },
       { path: 'users', name: 'users', component: () => import('@/views/Users.vue') },
+      { path: 'all-items', name: 'all-items', component: () => import('@/views/AllItems.vue') },
       { path: 'auctions', name: 'auctions', component: () => import('@/views/Auctions.vue') },
       { path: 'items', name: 'items', component: () => import('@/views/Items.vue') },
       { path: 'disputes', name: 'disputes', component: () => import('@/views/Disputes.vue') },

@@ -1,10 +1,17 @@
-.title { font-size: 34rpx; font-weight: 600; margin-bottom: 16rpx; }
-.label { font-size: 26rpx; color: #666; margin: 16rpx 0 8rpx; }
-.input, .textarea { border: 1px solid #ddd; padding: 16rpx; border-radius: 6rpx; background: #fff; }
-.textarea { height: 160rpx; width: 100%; box-sizing: border-box; }
-button { margin-top: 30rpx; }
-.empty { text-align: center; color: #999; padding: 60rpx 0; }
-.card { background: #fff; padding: 20rpx; border-radius: 10rpx; margin-bottom: 16rpx; }
-.card .meta { font-size: 26rpx; color: #909399; margin-bottom: 8rpx; }
-.card .reason { font-size: 28rpx; }
-.card .resolution { font-size: 26rpx; color: #67C23A; margin-top: 12rpx; }
+.container { padding: 24rpx; }
+.page-title { font-size: 34rpx; font-weight: 700; margin-bottom: 24rpx; color: #1a1a1a; }
+.label { font-size: 26rpx; color: #666; margin: 20rpx 0 10rpx; font-weight: 500; }
+.input, .textarea { border: 2rpx solid #eee; padding: 20rpx; border-radius: 12rpx; background: #fafafa; width: 100%; box-sizing: border-box; height: 80rpx; font-size: 28rpx; }
+.input:focus, .textarea:focus { border-color: #1296db; background: #fff; }
+.textarea { height: 200rpx; }
+.empty { text-align: center; color: #bbb; padding: 80rpx 0; font-size: 28rpx; }
+.empty::before { display: none; }
+.card { background: #fff; padding: 20rpx; border-radius: 16rpx; margin-bottom: 16rpx; box-shadow: 0 2rpx 12rpx rgba(0,0,0,.06); }
+.card .meta { font-size: 24rpx; color: #909399; margin-bottom: 8rpx; }
+.card .reason { font-size: 28rpx; line-height: 1.6; }
+.card .resolution { font-size: 26rpx; color: #67c23a; margin-top: 12rpx; }
+.login-prompt { text-align: center; padding: 120rpx 0; }
+.login-icon { font-size: 80rpx; margin-bottom: 20rpx; }
+.login-msg { font-size: 36rpx; font-weight: 600; color: #333; margin-bottom: 12rpx; }
+.login-desc { font-size: 28rpx; color: #999; margin-bottom: 40rpx; }
+.submit-btn { background: #f56c6c; color: #fff; border-radius: 12rpx; }

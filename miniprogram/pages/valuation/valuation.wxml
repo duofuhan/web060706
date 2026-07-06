@@ -1,12 +1,16 @@
 <view class="page">
-  <view class="top">💰 AI 估价助手</view>
+  <view class="top">AI 估价助手</view>
   <view class="tip" wx:if="{{loading && elapsed > 5}}">AI 正在分析,已等待 {{elapsed}} 秒…</view>
 
   <view class="area">
     <view class="empty" wx:if="{{msgs.length === 0 && !loading}}">输入拍品信息,获取起拍价建议</view>
-    <view class="line {{m.role === 'user' ? 'user' : 'ai'}}" wx:for="{{msgs}}" wx:key="index">
-      <view class="bubble">{{m.content}}</view>
+
+    <view wx:for="{{msgs}}" wx:key="index" class="line {{item.role === 'user' ? 'user' : 'ai'}}">
+      <view class="bubble">
+        <text user-select>{{item.content}}</text>
+      </view>
     </view>
+
     <view class="line ai" wx:if="{{loading}}">
       <view class="bubble loading">思考中…{{elapsed > 0 ? '(' + elapsed + 's)' : ''}}</view>
     </view>

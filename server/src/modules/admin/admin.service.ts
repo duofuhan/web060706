@@ -107,6 +107,21 @@ export const adminService = {
     });
   },
 
+  // 拍品列表(含订单发货状态)
+  async listItems(query: { pageSize?: number }) {
+    const take = Number(query.pageSize ?? 50);
+    const items = await prisma.item.findMany({
+      where: { status: { notIn: ['draft', 'pending'] } },
+      include: {
+        seller: { select: { id: true, nickname: true } },
+        auction: { select: { id: true, status: true, order: { select: { status: true, shippedAt: true } } } },
+      },
+      orderBy: { createdAt: 'desc' },
+      take,
+    });
+    return items;
+  },
+
   // 拍卖场次列表
   async listAuctions(query: any) {
     const status = query.status;

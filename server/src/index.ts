@@ -26,6 +26,9 @@ async function main() {
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 
+  // 操作审计日志 (必须放在路由前面)
+  app.use(auditLog);
+
   app.get('/health', (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
   app.use('/api/users', userRoutes);
@@ -36,8 +39,6 @@ async function main() {
   app.use('/api/admin', auth, adminRoutes);
   app.use('/api/ai', auth, aiRoutes);
   app.use('/api/disputes', auth, disputeRoutes);
-
-  app.use(auditLog);
 
   app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 

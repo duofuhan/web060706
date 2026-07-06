@@ -47,6 +47,7 @@ router.post('/login', async (req, res, next) => {
     const input = loginSchema.parse(req.body);
     const user = await prisma.user.findUnique({ where: { username: input.username } });
     if (!user) throw new AppError('用户名或密码错误');
+    if (user.status === 0) throw new AppError('账号已被禁用，请联系管理员');
     if (!comparePassword(input.password, user.password)) throw new AppError('用户名或密码错误');
     return success(res, {
       id: user.id,

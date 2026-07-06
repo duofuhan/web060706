@@ -62,6 +62,15 @@ router.get('/items/pending', requireRole('auction_admin', 'system_admin'), async
   }
 });
 
+router.get('/items/all', requireRole('auction_admin', 'system_admin'), async (req, res, next) => {
+  try {
+    const data = await adminService.listItems(req.query);
+    return success(res, data);
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.get('/auctions', requireRole('auction_admin', 'system_admin'), async (req, res, next) => {
   try {
     const data = await adminService.listAuctions(req.query);

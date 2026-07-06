@@ -1,6 +1,3 @@
--- Enable pgvector extension (required for SoldItemEmbedding.embedding)
-CREATE EXTENSION IF NOT EXISTS vector;
-
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('seller', 'buyer', 'auction_admin', 'system_admin');
 

@@ -1,19 +1,37 @@
 <view class="container">
-  <view class="title">我的</view>
-  <view wx:if="{{userInfo}}" class="profile">
-    <view class="info">账号: {{userInfo.username}}</view>
-    <view class="info">角色: {{userInfo.role === 'seller' ? '卖家' : (userInfo.role === 'buyer' ? '买家' : userInfo.role)}}</view>
+  <view class="page-title">我的</view>
+
+  <view wx:if="{{userInfo}}" class="profile-card">
+    <view class="avatar">👤</view>
+    <view class="name">{{userInfo.nickname || userInfo.username}}</view>
+    <view class="role">{{userInfo.role === 'seller' ? '卖家' : userInfo.role === 'buyer' ? '买家' : userInfo.role === 'auction_admin' ? '拍卖管理员' : '系统管理员'}}</view>
   </view>
-  <view wx:else>
-    <button type="primary" bindtap="goLogin">去登录</button>
+  <view wx:else class="profile-card" style="text-align:center">
+    <view class="avatar" style="margin:0 auto 16px">🔒</view>
+    <view class="name">未登录</view>
+    <button type="primary" size="mini" bindtap="goLogin" style="margin-top:20rpx;width:200rpx">去登录</button>
   </view>
 
-  <view class="menu">
-    <view class="menu-item" bindtap="goMyItems">📦 我的拍品</view>
-    <view class="menu-item" bindtap="goOrders">🛒 我的订单</view>
-    <view class="menu-item" bindtap="goValuation">💰 AI 估价助手</view>
-    <view class="menu-item" bindtap="goDispute">⚠️ 发起争议</view>
+  <view class="menu-grid">
+    <view class="menu-item" bindtap="goMyItems">
+      <view class="icon">📦</view>
+      <view class="label">我的拍品</view>
+    </view>
+    <view class="menu-item" bindtap="goOrders">
+      <view class="icon">🛒</view>
+      <view class="label">我的订单</view>
+    </view>
+    <view class="menu-item" bindtap="goValuation">
+      <view class="icon">💰</view>
+      <view class="label">AI估价助手</view>
+    </view>
+    <view class="menu-item" bindtap="goDispute">
+      <view class="icon">⚠️</view>
+      <view class="label">发起争议</view>
+    </view>
   </view>
 
-  <button wx:if="{{userInfo}}" style="margin-top:60rpx" bindtap="logout">退出登录</button>
+  <view class="logout-btn" wx:if="{{userInfo}}">
+    <button bindtap="logout">退出登录</button>
+  </view>
 </view>

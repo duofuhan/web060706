@@ -1,18 +1,26 @@
 <view class="container">
-  <view class="title">提交争议</view>
-  <view class="label">拍卖场次 ID</view>
-  <input class="input" type="number" value="{{auctionId}}" disabled="{{auctionId !== null}}" data-field="auctionId" />
-  <view class="label">争议原因 (不少于 5 字)</view>
-  <textarea class="textarea" value="{{reason}}" bindinput="onInput" placeholder="请描述您遇到的问题…" />
-  <button type="warn" bindtap="submit">提交争议</button>
-
-  <view class="title" style="margin-top:60rpx">我的争议记录</view>
-  <view wx:if="{{list.length === 0}}" class="empty">暂无争议</view>
+  <view wx:if="{{!loggedIn}}" class="login-prompt">
+    <view class="login-icon">🔒</view>
+    <view class="login-msg">未登录</view>
+    <view class="login-desc">请先登录后发起争议</view>
+    <button type="primary" bindtap="goLogin">前往登录</button>
+  </view>
   <view wx:else>
-    <view class="card" wx:for="{{list}}" wx:key="id">
-      <view class="meta">争议 #{{item.id}} · {{item.status}}</view>
-      <view class="reason">{{item.reason}}</view>
-      <view wx:if="{{item.resolution}}" class="resolution">处理: {{item.resolution}}</view>
+    <view class="page-title">提交争议</view>
+    <view class="label">拍卖场次 ID</view>
+    <input class="input" type="number" value="{{auctionId}}" bindinput="onAuctionInput" placeholder="请输入拍卖场次 ID" />
+    <view class="label">争议原因 (不少于 5 字)</view>
+    <textarea class="textarea" value="{{reason}}" bindinput="onInput" placeholder="请描述您遇到的问题…" />
+    <button class="submit-btn" bindtap="submit">提交争议</button>
+
+    <view class="section-title" style="margin-top:60rpx">我的争议记录</view>
+    <view wx:if="{{list.length === 0}}" class="empty">暂无争议</view>
+    <view wx:else>
+      <view class="card" wx:for="{{list}}" wx:key="id">
+        <view class="meta">争议 #{{item.id}} · {{item.status}}</view>
+        <view class="reason">{{item.reason}}</view>
+        <view wx:if="{{item.resolution}}" class="resolution">处理: {{item.resolution}}</view>
+      </view>
     </view>
   </view>
 </view>

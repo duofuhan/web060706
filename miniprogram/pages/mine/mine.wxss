@@ -1,3 +1,30 @@
-.title { font-size: 36rpx; font-weight: 600; margin-bottom: 30rpx; }
-.info { margin-bottom: 16rpx; }
-button { margin-top: 40rpx; }
+.profile-card {
+  background: linear-gradient(135deg, #87CEEB 0%, #5BC0EB 100%);
+  border-radius: 20rpx;
+  padding: 40rpx 32rpx;
+  margin-bottom: 32rpx;
+  color: #fff;
+}
+.profile-card .avatar {
+  width: 100rpx; height: 100rpx; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48rpx; margin-bottom: 16rpx;
+}
+.profile-card .name { font-size: 34rpx; font-weight: 600; margin-bottom: 8rpx; }
+.profile-card .role { font-size: 26rpx; opacity: .85; }
+
+.menu-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+.menu-grid .menu-item {
+  background: #fff; border-radius: 16rpx; padding: 32rpx 24rpx;
+  text-align: center; box-shadow: 0 2rpx 12rpx rgba(0,0,0,.06);
+}
+.menu-grid .menu-item .icon { font-size: 52rpx; margin-bottom: 12rpx; }
+.menu-grid .menu-item .label { font-size: 26rpx; color: #333; font-weight: 500; }
+.menu-grid .menu-item:active { transform: scale(.96); opacity: .8; }
+
+.logout-btn { margin-top: 60rpx; }
+.logout-btn button { background: #fef0f0; color: #f56c6c; border: none; }

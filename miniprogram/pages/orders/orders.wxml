@@ -1,22 +1,28 @@
 <view class="container">
-  <view class="title">我的订单</view>
+  <view class="page-title">我的订单</view>
   <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
   <view wx:else>
     <view class="card" wx:for="{{orders}}" wx:key="id">
-      <view class="title">{{item.auction.item.name || '拍品'}}</view>
-      <view class="meta">成交价: ¥{{item.finalPrice}} · {{statusMap[item.status] || item.status}}</view>
+      <image class="thumb" wx:if="{{item.auction.item.images && item.auction.item.images.length > 0}}" src="{{imgBase + item.auction.item.images[0]}}" mode="aspectFill" />
+      <view class="card-body">
+        <view class="title">{{item.auction.item.name || '拍品'}}</view>
+        <view class="meta">拍卖场次 #{{item.auctionId}} · 成交价: ¥{{item.finalPrice}} · {{statusMap[item.status] || item.status}}</view>
 
-      <view wx:if="{{item.status === 'pending' && item.buyerId === myUserId}}">
-        <button size="mini" type="warn" data-id="{{item.id}}" bindtap="pay">立即支付</button>
-      </view>
-      <view wx:elif="{{item.status === 'pending' && item.buyerId !== myUserId}}">
-        <view class="buyer">等待买家付款…</view>
-      </view>
-      <view wx:if="{{item.status === 'shipped' && item.buyerId === myUserId}}">
-        <button size="mini" type="primary" data-id="{{item.id}}" bindtap="confirm">确认收货</button>
-      </view>
-      <view wx:if="{{item.status === 'shipped' && item.buyerId !== myUserId}}">
-        <view class="buyer">买家待收货</view>
+        <view wx:if="{{item.status === 'pending' && myRole === 'buyer'}}">
+          <button size="mini" type="warn" data-id="{{item.id}}" bindtap="pay">立即支付</button>
+        </view>
+        <view wx:elif="{{item.status === 'paid' && myRole === 'seller'}}">
+          <button size="mini" type="primary" data-id="{{item.id}}" bindtap="ship">发货</button>
+        </view>
+        <view wx:elif="{{item.status === 'shipped' && myRole === 'buyer'}}">
+          <button size="mini" type="primary" data-id="{{item.id}}" bindtap="confirm">确认收货</button>
+        </view>
+        <view wx:elif="{{item.status === 'shipped' && myRole === 'seller'}}">
+          <view class="buyer">买家待收货</view>
+        </view>
+        <view wx:elif="{{item.status === 'pending'}}">
+          <view class="buyer">等待买家付款…</view>
+        </view>
       </view>
     </view>
   </view>

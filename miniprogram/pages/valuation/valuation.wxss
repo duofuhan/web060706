@@ -12,20 +12,26 @@
 }
 
 .empty { text-align: center; color: #ccc; padding: 100rpx 0; font-size: 28rpx; }
+.empty::before { display: none; }
 
-.line { margin-bottom: 20rpx; overflow: hidden; }
+.line { margin-bottom: 20rpx; }
 .line.user { text-align: right; }
 .line.ai { text-align: left; }
 
 .bubble {
   display: inline-block;
-  max-width: 80%;
+  max-width: 88%;
   padding: 16rpx 20rpx;
   border-radius: 10rpx;
   font-size: 26rpx;
   line-height: 1.6;
   text-align: left;
-  word-break: break-all;
+}
+
+.bubble text {
+  display: block;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .line.user .bubble { background: #1296db; color: #fff; }

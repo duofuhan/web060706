@@ -9,7 +9,8 @@
     "pages/valuation/valuation",
     "pages/myItems/myItems",
     "pages/orders/orders",
-    "pages/dispute/dispute"
+    "pages/dispute/dispute",
+    "pages/register/register"
   ],
   "window": {
     "backgroundTextStyle": "light",

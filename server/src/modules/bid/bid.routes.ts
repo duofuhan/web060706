@@ -32,6 +32,7 @@ router.post('/', auth, async (req, res, next) => {
       auctionId: bid.auctionId,
       userId: bid.userId,
       amount: Number(bid.amount),
+      currentPrice: currentPrice,
       time: bid.createdAt,
     });
     return success(res, { bidId: bid.id, currentPrice }, '出价成功');

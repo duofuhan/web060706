@@ -15,7 +15,7 @@ export async function chatCompletion(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
   options: { temperature?: number; maxTokens?: number; stream?: boolean } = {},
 ) {
-  const { temperature = 0.7, maxTokens = 1024, stream = false } = options;
+  const { temperature = 0.7, maxTokens = 4096, stream = false } = options;
   const res = await chatClient.chat.completions.create({
     model: env.OPENAI_MODEL,
     messages,
