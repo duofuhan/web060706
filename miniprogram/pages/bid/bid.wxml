@@ -17,8 +17,12 @@
         <view class="price-label">当前价</view>
         <view class="price-value">¥{{currentPrice}}</view>
       </view>
+      <view class="price-box">
+        <view class="price-label">加价幅度</view>
+        <view class="price-value" style="font-size:32rpx">¥{{minIncrement}}</view>
+      </view>
     </view>
-    <input class="input" type="number" value="{{amount}}" placeholder="输入出价金额" bindinput="onInput" />
+    <input class="input" type="number" value="{{amount}}" placeholder="最低出价 ¥{{minBid}}" bindinput="onInput" />
     <button type="warn" bindtap="bid">出价</button>
     <view class="bid-list" wx:if="{{bids.length > 0}}">
       <view class="bid-title">出价记录</view>

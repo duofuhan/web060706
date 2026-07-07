@@ -1,5 +1,5 @@
 <view class="container" wx:if="{{auction}}">
-  <image class="auction-img" wx:if="{{auction.item.images && auction.item.images.length > 0}}" src="{{imgBase + auction.item.images[0]}}" mode="widthFix" />
+  <image class="auction-img" wx:if="{{imgUrl}}" src="{{imgUrl}}" mode="widthFix" />
   <view class="auction-title">{{auction.item.name}}</view>
   <view class="info-card">
     <view class="info-row">
@@ -9,6 +9,10 @@
     <view class="info-row">
       <view class="info-label">当前价</view>
       <view class="info-value">¥{{auction.currentPrice}}</view>
+    </view>
+    <view class="info-row">
+      <view class="info-label">加价幅度</view>
+      <view class="info-value">¥{{auction.minIncrement}}</view>
     </view>
   </view>
   <button type="primary" bindtap="goBid">参与竞拍</button>

@@ -10,7 +10,8 @@
     "pages/myItems/myItems",
     "pages/orders/orders",
     "pages/dispute/dispute",
-    "pages/register/register"
+    "pages/register/register",
+    "pages/profile/profile"
   ],
   "window": {
     "backgroundTextStyle": "light",

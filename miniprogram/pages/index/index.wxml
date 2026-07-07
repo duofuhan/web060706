@@ -4,7 +4,8 @@
   <view wx:elif="{{auctions.length === 0}}" class="empty">暂无拍卖,请稍后再来</view>
   <view wx:else>
     <view class="card" wx:for="{{auctions}}" wx:key="id" bindtap="goAuction" data-id="{{item.id}}">
-      <image class="thumb" wx:if="{{item.item.images && item.item.images.length > 0}}" src="{{imgBase + item.item.images[0]}}" mode="aspectFill" />
+      <image class="thumb" wx:if="{{item.item._imgUrl}}" src="{{item.item._imgUrl}}" mode="aspectFill" />
+      <view class="thumb thumb-placeholder" wx:else>📷</view>
       <view class="card-body">
         <view class="title">{{item.item.name || '未命名拍品'}}</view>
         <view class="meta">起拍 ¥{{item.startPrice}} · 当前 ¥{{item.currentPrice}}</view>

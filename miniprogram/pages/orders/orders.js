@@ -22,7 +22,17 @@ Page({
         this.setData({ myUserId: me.data.id, myRole: me.data.role });
       }
       const res = await get('/orders', { pageSize: 30 });
-      this.setData({ orders: res.data.list || [] });
+      const orders = res.data.list || [];
+      const base = app.globalData.apiBase.replace('/api', '');
+      for (let i = 0; i < orders.length; i++) {
+        const o = orders[i];
+        if (o.auction && o.auction.item && o.auction.item.images && o.auction.item.images.length > 0 && o.auction.item.images[0] && o.auction.item.images[0].indexOf('/uploads/') === 0) {
+          orders[i]._imgUrl = base + o.auction.item.images[0];
+        } else {
+          orders[i]._imgUrl = '';
+        }
+      }
+      this.setData({ orders: orders });
     } catch (e) {}
   },
   async pay(e) {

@@ -1,0 +1,48 @@
+<view class="page">
+  <view class="section avatar-section" bindtap="chooseAvatar">
+    <image class="avatar" wx:if="{{userInfo.avatar}}" src="{{imgBase + userInfo.avatar}}" mode="aspectFill" />
+    <view class="avatar-placeholder" wx:else>👤</view>
+    <view class="avatar-label">点击更换头像</view>
+  </view>
+
+  <view class="section">
+    <view class="row">
+      <view class="row-label">用户名</view>
+      <view class="row-value">{{userInfo.username}}</view>
+    </view>
+    <view class="row">
+      <view class="row-label">角色</view>
+      <view class="row-value">{{roleName}}</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="row">
+      <view class="row-label">昵称</view>
+      <input class="row-input" value="{{form.nickname}}" bindinput="onInput" data-field="nickname" placeholder="请输入昵称" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">修改密码</view>
+    <view class="row">
+      <view class="row-label">当前密码</view>
+      <input class="row-input" password="{{true}}" value="{{form.currentPassword}}" bindinput="onInput" data-field="currentPassword" placeholder="输入当前密码" />
+    </view>
+    <view class="row">
+      <view class="row-label">新密码</view>
+      <input class="row-input" password="{{true}}" value="{{form.newPassword}}" bindinput="onInput" data-field="newPassword" placeholder="输入新密码(6位以上)" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">收货地址</view>
+    <view class="row">
+      <textarea class="address-input" value="{{form.address}}" bindinput="onInput" data-field="address" placeholder="请输入收货地址" maxlength="200" />
+    </view>
+  </view>
+
+  <view class="save-btn">
+    <button type="primary" bindtap="save" loading="{{saving}}">保存</button>
+  </view>
+</view>

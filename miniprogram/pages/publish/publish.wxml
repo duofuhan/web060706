@@ -1,11 +1,11 @@
 <scroll-view class="page" scroll-y>
-  <view class="page-title">📦 发布拍品</view>
+  <view class="page-title">{{editItemId ? '编辑拍品' : '发布拍品'}}</view>
 
   <view class="form-section">
     <view class="form-label">拍品图片</view>
     <view class="img-grid">
       <view class="img-item" wx:for="{{imageList}}" wx:key="*this">
-        <image src="{{item}}" mode="aspectFill" />
+        <image src="{{item.indexOf('/uploads/') === 0 || (item.indexOf('http') === 0 && item.indexOf('http://tmp/') !== 0) ? imgBase + item : item}}" mode="aspectFill" />
         <view class="del" data-idx="{{index}}" bindtap="removeImage">×</view>
       </view>
       <view class="img-add" wx:if="{{imageList.length < 5}}" bindtap="chooseImage">+</view>
@@ -14,22 +14,22 @@
 
   <view class="form-section">
     <view class="form-label">拍品名称 *</view>
-    <input class="form-input" data-field="name" bindinput="onInput" placeholder="如 iPhone 14 256G" />
+    <input class="form-input" data-field="name" bindinput="onInput" value="{{form.name}}" placeholder="如 iPhone 14 256G" />
   </view>
 
   <view class="form-section">
     <view class="form-label">成色 *</view>
-    <input class="form-input" data-field="condition" bindinput="onInput" placeholder="如 95新 / 9成新" />
+    <input class="form-input" data-field="condition" bindinput="onInput" value="{{form.condition}}" placeholder="如 95新 / 9成新" />
   </view>
 
   <view class="form-section">
     <view class="form-label">原价 *</view>
-    <input class="form-input" type="digit" data-field="originPrice" bindinput="onInput" placeholder="购入价" />
+    <input class="form-input" type="digit" data-field="originPrice" bindinput="onInput" value="{{form.originPrice}}" placeholder="购入价" />
   </view>
 
   <view class="form-section">
     <view class="form-label">起拍价 *</view>
-    <input class="form-input" type="digit" data-field="startPrice" bindinput="onInput" />
+    <input class="form-input" type="digit" data-field="startPrice" bindinput="onInput" value="{{form.startPrice}}" />
   </view>
 
   <view class="form-section">
@@ -51,6 +51,6 @@
   </view>
 
   <view class="submit-wrap">
-    <button type="primary" bindtap="submit">提交拍品</button>
+    <button type="primary" bindtap="submit">{{editItemId ? '提交审核' : '提交拍品'}}</button>
   </view>
 </scroll-view>

@@ -70,7 +70,7 @@ router.post('/:id/review', auth, requireRole('auction_admin', 'system_admin'), a
   }
 });
 
-router.post('/upload', auth, requireRole('seller'), upload.array('images', 5), (req, res) => {
+router.post('/upload', auth, upload.array('images', 5), (req, res) => {
   const files = (req.files as Express.Multer.File[]) ?? [];
   const urls = files.map((f) => imageUrlPath(f.filename));
   return success(res, { urls }, '上传成功');

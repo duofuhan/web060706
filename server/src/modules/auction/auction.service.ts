@@ -9,7 +9,7 @@ const createSchema = z.object({
   type: z.enum(['ascending', 'sealed', 'descending']).default('ascending'),
   startPrice: z.coerce.number().positive().optional(),
   reservePrice: z.coerce.number().nonnegative().optional(),
-  minIncrement: z.coerce.number().positive().default(50),
+  minIncrement: z.coerce.number().positive().optional(),
   startTime: z.string().datetime(),
   endTime: z.string().datetime(),
   durationMinutes: z.coerce.number().int().positive().max(1440).optional(),
@@ -40,6 +40,13 @@ export const auctionService = {
     if (end <= start) throw new AppError('结束时间必须晚于开始时间');
 
     const startPrice = input.startPrice ?? Number(item.startPrice);
+
+    let minInc = input.minIncrement;
+    if (!minInc) {
+      const config = await prisma.systemConfig.findUnique({ where: { key: 'bid_min_increment' } });
+      minInc = Number(config?.value) || 50;
+    }
+
     return prisma.auction.create({
       data: {
         sellerId,
@@ -47,7 +54,7 @@ export const auctionService = {
         type: input.type,
         startPrice,
         currentPrice: startPrice,
-        minIncrement: input.minIncrement,
+        minIncrement: minInc,
         startTime: start,
         endTime: end,
         status: 'scheduled',

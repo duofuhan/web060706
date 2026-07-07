@@ -2,7 +2,7 @@ const { get } = require('../../utils/api.js');
 const app = getApp();
 
 Page({
-  data: { id: null, auction: null, socket: null, imgBase: '' },
+  data: { id: null, auction: null, socket: null, imgBase: '', imgUrl: '' },
   onLoad(query) {
     this.setData({ id: query.id, imgBase: app.globalData.apiBase.replace('/api', '') });
     this.load();
@@ -11,7 +11,15 @@ Page({
   async load() {
     try {
       const res = await get('/auctions/' + this.data.id);
-      this.setData({ auction: res.data });
+      const auction = res.data;
+      let imgUrl = '';
+      if (auction && auction.item && auction.item.images && auction.item.images.length > 0) {
+        const first = auction.item.images[0];
+        if (first && first.indexOf('/uploads/') === 0) {
+          imgUrl = this.data.imgBase + first;
+        }
+      }
+      this.setData({ auction: auction, imgUrl: imgUrl });
     } catch (e) {}
   },
   connectWs() {

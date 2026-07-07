@@ -1,10 +1,14 @@
 <view class="container">
-  <view class="page-title">我的</view>
-
-  <view wx:if="{{userInfo}}" class="profile-card">
-    <view class="avatar">👤</view>
-    <view class="name">{{userInfo.nickname || userInfo.username}}</view>
-    <view class="role">{{userInfo.role === 'seller' ? '卖家' : userInfo.role === 'buyer' ? '买家' : userInfo.role === 'auction_admin' ? '拍卖管理员' : '系统管理员'}}</view>
+  <view wx:if="{{userInfo}}" class="profile-card" bindtap="goProfile">
+    <view class="profile-row">
+      <image class="avatar" wx:if="{{userInfo.avatar}}" src="{{imgBase + userInfo.avatar}}" mode="aspectFill" />
+      <view class="avatar" wx:else>👤</view>
+      <view class="profile-info">
+        <view class="name">{{userInfo.nickname || userInfo.username}}</view>
+        <view class="role" catchtap="switchRole">{{userInfo.role === 'seller' ? '卖家' : userInfo.role === 'buyer' ? '买家' : userInfo.role === 'auction_admin' ? '拍卖管理员' : '系统管理员'}}</view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
   </view>
   <view wx:else class="profile-card" style="text-align:center">
     <view class="avatar" style="margin:0 auto 16px">🔒</view>
@@ -31,7 +35,46 @@
     </view>
   </view>
 
-  <view class="logout-btn" wx:if="{{userInfo}}">
-    <button bindtap="logout">退出登录</button>
+  <view class="action-btns">
+    <view class="action-btn" bindtap="showSwitchAccount">
+      <text>🔄 切换账号</text>
+    </view>
+    <view class="action-btn logout" wx:if="{{userInfo}}" bindtap="logout">
+      <text>退出登录</text>
+    </view>
+  </view>
+
+  <!-- 切换账号弹窗 -->
+  <view class="modal-mask" wx:if="{{showAccountModal}}" bindtap="hideAccountModal"></view>
+  <view class="modal" wx:if="{{showAccountModal}}">
+    <view class="modal-title">切换账号</view>
+    <scroll-view class="account-list" scroll-y>
+      <view wx:for="{{accounts}}" wx:key="index" class="account-item {{item.current ? 'current' : ''}}" bindtap="switchToAccount" data-idx="{{index}}">
+        <view class="account-info">
+          <view class="account-name">{{item.username}}</view>
+        </view>
+        <view class="account-check" wx:if="{{item.current}}">✓</view>
+        <view class="account-del" catchtap="deleteAccount" data-idx="{{index}}" data-event-stop>×</view>
+      </view>
+      <view class="account-item add" bindtap="addAccount">
+        <view class="account-info">
+          <view class="account-name">+ 添加账号</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 添加账号弹窗 -->
+  <view class="modal-mask" wx:if="{{showAddModal}}" bindtap="hideAddModal"></view>
+  <view class="modal" wx:if="{{showAddModal}}">
+    <view class="modal-title">添加账号</view>
+    <view class="add-form">
+      <input class="add-input" placeholder="用户名" value="{{newUsername}}" bindinput="onNewUsername" />
+      <input class="add-input" placeholder="密码" password="{{true}}" value="{{newPassword}}" bindinput="onNewPassword" />
+      <view class="add-actions">
+        <button size="mini" bindtap="doAddAccount">添加并登录</button>
+        <button size="mini" plain bindtap="hideAddModal">取消</button>
+      </view>
+    </view>
   </view>
 </view>

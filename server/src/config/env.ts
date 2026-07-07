@@ -20,6 +20,8 @@ const envSchema = z.object({
   EMBEDDING_MODEL: z.string().default('BAAI/bge-m3'),
   EMBEDDING_DIMENSION: z.coerce.number().int().positive().default(1024),
 
+  TAVILY_API_KEY: z.string().optional(),
+
   WX_APPID: z.string().optional(),
   WX_SECRET: z.string().optional(),
 });

@@ -2,14 +2,15 @@
   <view class="page-title">我的拍品</view>
   <view wx:if="{{items.length === 0}}" class="empty">暂无拍品,快去发布吧</view>
   <view wx:else>
-    <view class="card" wx:for="{{items}}" wx:key="id">
-      <image class="thumb" wx:if="{{item.images && item.images.length > 0}}" src="{{imgBase + item.images[0]}}" mode="aspectFill" />
+    <view class="card" wx:for="{{items}}" wx:key="id" bindtap="onItemTap" data-id="{{item.id}}" data-status="{{item.status}}">
+      <image class="thumb" wx:if="{{item._imgUrl}}" src="{{item._imgUrl}}" mode="aspectFill" />
+      <view class="thumb thumb-placeholder" wx:else>📷</view>
       <view class="card-body">
         <view class="title">{{item.name}}</view>
         <view class="meta">起拍 ¥{{item.startPrice}} · {{item.condition}}</view>
         <view class="status-tag {{item.status}}">{{statusMap[item.status] || item.status}}</view>
         <view wx:if="{{item.status === 'approved' && !item.auction}}" style="margin-top:8rpx">
-          <button size="mini" type="primary" data-id="{{item.id}}" bindtap="startAuction">开启拍卖</button>
+          <button size="mini" type="primary" data-id="{{item.id}}" catchtap="startAuction">开启拍卖</button>
         </view>
         <view wx:elif="{{item.auction}}" style="margin-top:8rpx">
           <view class="status-label">拍卖场次 #{{item.auction.id}} · {{item.auction.status === 'scheduled' ? '待开始' : item.auction.status === 'live' ? '进行中' : item.auction.status === 'settled' ? '已成交' : '已结束'}}</view>

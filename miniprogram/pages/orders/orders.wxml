@@ -3,7 +3,7 @@
   <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
   <view wx:else>
     <view class="card" wx:for="{{orders}}" wx:key="id">
-      <image class="thumb" wx:if="{{item.auction.item.images && item.auction.item.images.length > 0}}" src="{{imgBase + item.auction.item.images[0]}}" mode="aspectFill" />
+      <image class="thumb" wx:if="{{item._imgUrl}}" src="{{item._imgUrl}}" mode="aspectFill" />
       <view class="card-body">
         <view class="title">{{item.auction.item.name || '拍品'}}</view>
         <view class="meta">拍卖场次 #{{item.auctionId}} · 成交价: ¥{{item.finalPrice}} · {{statusMap[item.status] || item.status}}</view>

@@ -35,5 +35,9 @@ function post(url, data, opts) {
   opts = opts || {};
   return request({ url: url, method: 'POST', data: data, silent: opts.silent, timeout: opts.timeout });
 }
+function put(url, data, opts) {
+  opts = opts || {};
+  return request({ url: url, method: 'PUT', data: data, silent: opts.silent, timeout: opts.timeout });
+}
 
-module.exports = { request: request, get: get, post: post };
+module.exports = { request: request, get: get, post: post, put: put };

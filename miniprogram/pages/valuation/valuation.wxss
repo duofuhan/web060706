@@ -40,6 +40,6 @@
 .loading { background: #eee; color: #333; animation: blink 1s infinite; }
 @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:0.3 } }
 
-.bar { display: flex; gap: 12rpx; padding: 12rpx 24rpx 30rpx; }
+.bar { display: flex; align-items: center; gap: 12rpx; padding: 12rpx 24rpx 30rpx; }
 .bar input { flex: 1; border: 1px solid #ddd; padding: 16rpx; border-radius: 8rpx; background: #fff; font-size: 28rpx; }
 .bar button { flex-shrink: 0; }

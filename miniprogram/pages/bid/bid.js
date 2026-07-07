@@ -2,7 +2,7 @@ const { get } = require('../../utils/api.js');
 const app = getApp();
 
 Page({
-  data: { auctionId: null, socket: null, amount: '', currentPrice: 0, startPrice: 0, bids: [], itemName: '', itemImage: '', loggedIn: false, imgBase: '' },
+  data: { auctionId: null, socket: null, amount: '', currentPrice: 0, startPrice: 0, minIncrement: 0, minBid: 0, bids: [], itemName: '', itemImage: '', loggedIn: false, imgBase: '', sellerId: null },
   onLoad(query) {
     this.setData({ auctionId: query.id, imgBase: app.globalData.apiBase.replace('/api', ''), loggedIn: !!(app.globalData.token && app.globalData.userInfo) });
     if (!this.data.loggedIn) return;
@@ -28,8 +28,11 @@ Page({
         this.setData({
           currentPrice: res.data.currentPrice,
           startPrice: res.data.startPrice,
+          minIncrement: res.data.minIncrement,
+          minBid: Number(res.data.currentPrice) + Number(res.data.minIncrement),
           itemName: res.data.item ? res.data.item.name : '',
-          itemImage: (res.data.item && res.data.item.images && res.data.item.images.length > 0) ? this.data.imgBase + res.data.item.images[0] : '',
+          itemImage: (res.data.item && res.data.item.images && res.data.item.images.length > 0 && res.data.item.images[0].indexOf('/uploads/') === 0) ? this.data.imgBase + res.data.item.images[0] : '',
+          sellerId: res.data.sellerId,
         });
       }
     } catch (e) {}
@@ -54,9 +57,13 @@ Page({
     });
     ws.onMessage(function (res) {
       var msg = JSON.parse(res.data);
+      if (msg.action === 'error') {
+        wx.showToast({ title: msg.message || '出价失败', icon: 'none' });
+        return;
+      }
       if (msg.action === 'bid' && msg.auctionId === Number(that.data.auctionId)) {
         if (msg.currentPrice) {
-          that.setData({ currentPrice: msg.currentPrice });
+          that.setData({ currentPrice: msg.currentPrice, minBid: Number(msg.currentPrice) + Number(that.data.minIncrement) });
         }
         // 将新出价插入bids并保持排序
         var newBids = that.data.bids.concat([{
@@ -76,8 +83,11 @@ Page({
   bid() {
     var amount = Number(this.data.amount);
     if (!amount) return wx.showToast({ title: '请输入出价', icon: 'none' });
-    if (amount <= Number(this.data.currentPrice)) {
-      return wx.showToast({ title: '出价需高于当前价', icon: 'none' });
+    if (amount < this.data.minBid) {
+      return wx.showToast({ title: '出价需 ≥ ¥' + this.data.minBid, icon: 'none' });
+    }
+    if (this.data.sellerId && this.data.sellerId === (app.globalData.userInfo && app.globalData.userInfo.id)) {
+      return wx.showToast({ title: '不可对自己的拍品出价', icon: 'none' });
     }
     this.data.socket.send({
       data: JSON.stringify({ action: 'bid', auctionId: Number(this.data.auctionId), amount: amount }),

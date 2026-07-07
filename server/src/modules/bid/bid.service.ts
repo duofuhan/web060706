@@ -25,6 +25,10 @@ export const bidService = {
       );
     }
 
+    if (!isFinite(input.amount) || input.amount > 999999999999) {
+      throw new AppError('无效的出价金额');
+    }
+
     const prevMax = await prisma.bid.findFirst({
       where: { auctionId: input.auctionId, status: { in: ['active', 'winning'] } },
       orderBy: { amount: 'desc' },

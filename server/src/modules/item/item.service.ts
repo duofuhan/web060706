@@ -85,7 +85,11 @@ export const itemService = {
     if (!item) throw new AppError('拍品不存在', 404, 404);
     if (item.sellerId !== sellerId) throw new AppError('无权修改他人拍品', 403, 403);
     const input = updateSchema.parse(body);
-    return prisma.item.update({ where: { id }, data: input });
+    const { submitForReview, ...data } = input as any;
+    if (data.status === 'pending' && submitForReview) {
+      return prisma.item.update({ where: { id }, data: { ...data, status: 'pending' } });
+    }
+    return prisma.item.update({ where: { id }, data });
   },
 
   async delete(id: number, sellerId: number, role: string) {

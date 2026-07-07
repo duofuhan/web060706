@@ -4,6 +4,7 @@ App({
     wsBase: 'ws://localhost:3000',
     token: '',
     userInfo: null,
+    editItemId: null,
   },
   onLaunch() {
     const token = wx.getStorageSync('token');
