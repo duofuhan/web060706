@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getAuctions } from '@/api/admin';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { getAuctions, forceEndAuction, forceCancelAuction } from '@/api/admin';
 
 const route = useRoute();
 const list = ref<any[]>([]);
@@ -28,6 +29,27 @@ async function load() {
 
 function fmt(d: string) {
   return new Date(d).toLocaleString('zh-CN');
+}
+
+async function handleForceEnd(row: any) {
+  try {
+    await ElMessageBox.confirm(`确定强制结束拍卖 #${row.id}（${row.item?.name}）？有出价将自动成交生成订单。`, '确认', { type: 'warning' });
+    await forceEndAuction(row.id);
+    ElMessage.success('已强制结束');
+    load();
+  } catch {}
+}
+
+async function handleForceCancel(row: any) {
+  try {
+    const { value } = await ElMessageBox.prompt(`强制取消拍卖 #${row.id}（${row.item?.name}）？`, '输入取消原因', {
+      inputPattern: /.+/,
+      inputErrorMessage: '请输入取消原因',
+    });
+    await forceCancelAuction(row.id, value);
+    ElMessage.success('已强制取消');
+    load();
+  } catch {}
 }
 
 onMounted(load);
@@ -67,6 +89,12 @@ onMounted(load);
         <template #default="{ row }">
           <div>{{ fmt(row.startTime) }}</div>
           <div style="color: #909399">{{ fmt(row.endTime) }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="200" fixed="right">
+        <template #default="{ row }">
+          <el-button v-if="row.status === 'live'" type="primary" size="small" @click="handleForceEnd(row)">强制结束</el-button>
+          <el-button v-if="row.status === 'live' || row.status === 'scheduled'" type="danger" size="small" @click="handleForceCancel(row)">强制取消</el-button>
         </template>
       </el-table-column>
     </el-table>

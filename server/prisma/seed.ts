@@ -3,6 +3,7 @@ import { PrismaClient, UserRole } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { hashPassword } from '../src/utils/password.js';
+import { indexSoldItem } from '../src/modules/ai/ai.service.js';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -129,6 +130,14 @@ async function main() {
             },
           });
           console.log(`  + order #${order.id} (paid)`);
+          await indexSoldItem({
+            itemId: auction.itemId,
+            name: approvedItem.name,
+            category: approvedItem.category,
+            condition: approvedItem.condition,
+            finalPrice: 5800,
+            soldAt: new Date(),
+          }).catch((e) => console.error('  ⚠️ 向量写入失败:', e.message));
         }
       }
     }

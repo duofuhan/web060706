@@ -86,7 +86,7 @@ export const itemService = {
     if (item.sellerId !== sellerId) throw new AppError('无权修改他人拍品', 403, 403);
     const input = updateSchema.parse(body);
     const { submitForReview, ...data } = input as any;
-    if (data.status === 'pending' && submitForReview) {
+    if (submitForReview) {
       return prisma.item.update({ where: { id }, data: { ...data, status: 'pending' } });
     }
     return prisma.item.update({ where: { id }, data });

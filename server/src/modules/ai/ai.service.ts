@@ -333,11 +333,12 @@ export async function indexSoldItem(item: {
 }) {
   const input = `${item.name} ${item.category ?? ''} ${item.condition}`;
   const vec = (await createEmbedding(input))[0];
+  const vecStr = `[${vec.join(',')}]`;
   await prisma.$executeRaw`
     INSERT INTO "SoldItemEmbedding"
       ("itemId", name, category, condition, "finalPrice", "soldAt", embedding, "createdAt")
     VALUES
       (${item.itemId}, ${item.name}, ${item.category ?? ''}, ${item.condition},
-       ${item.finalPrice}, ${item.soldAt}, ${vec}::vector, NOW())
+       ${item.finalPrice}, ${item.soldAt}, ${vecStr}::vector, NOW())
   `;
 }
