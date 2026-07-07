@@ -35,6 +35,18 @@ miniprogram/miniprogram_npm/
 miniprogram/.cache/
 miniprogram/project.private.config.json
 
+# 上传图片
+server/uploads/
+
+# 文档/非代码文件
+db_dump.sql
+项目文档.md
+题目.txt
+查看数据命令.txt
+课程设计报告.md
+架构图/
+其他文件/
+
 # 临时
 .tmp/
 .cache/server/uploads/
